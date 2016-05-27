@@ -10,8 +10,9 @@ RSpec.describe provider_class do
 
       @resource = Puppet::Type::Dism.new(params)
       @provider = provider_class.new(@resource)
-      Puppet::Provider.stubs(:command).with(:dism).returns('dism.exe')
-      File.stubs(:exists?).with('C:\Windows\sysnative\Dism.exe').returns(true)
+      #Puppet::Provider.stubs(:command).with(:dism).returns('dism.exe')
+      # DEBUG File.stubs(:exists?).with('C:\Windows\sysnative\Dism.exe').returns(true)
+      #File.expects(:exists?).with("#{ENV['SYSTEMROOT']}\\sysnative\\Dism.exe").returns(true)
       cmd = %w(dism.exe /online /Enable-Feature)
       if params[:all] == true
         cmd << '/All'
@@ -28,7 +29,6 @@ RSpec.describe provider_class do
       if (params.has_key?(:norestart) && params[:norestart] == true) || !(params.has_key?(:norestart))
         cmd << '/NoRestart'
       end
-
 
       Puppet::Util::Execution.stubs(:execute).with(
         cmd, {:failonfail => false}

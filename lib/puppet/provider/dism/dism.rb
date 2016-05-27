@@ -4,14 +4,14 @@ Puppet::Type.type(:dism).provide(:dism) do
   confine :operatingsystem => :windows
   defaultfor :operatingsystem => :windows
 
-  commands :dism =>
-             if File.exists? ("#{ENV['SYSTEMROOT']}\\sysnative\\Dism.exe")
-               "#{ENV['SYSTEMROOT']}\\sysnative\\Dism.exe"
-             elsif  File.exists? ("#{ENV['SYSTEMROOT']}\\system32\\Dism.exe")
-               "#{ENV['SYSTEMROOT']}\\system32\\Dism.exe"
-             else
-               'dism.exe'
-             end
+  commands :dism => "dism.exe"
+  # if File.exists? ("#{ENV['SYSTEMROOT']}\\sysnative\\Dism.exe")
+  #     "#{ENV['SYSTEMROOT']}\\sysnative\\Dism.exe"
+  #   elsif  File.exists? ("#{ENV['SYSTEMROOT']}\\system32\\Dism.exe")
+  #     "#{ENV['SYSTEMROOT']}\\system32\\Dism.exe"
+  #   else
+  #     'dism.exe'
+  #   end
 
 
   def self.prefetch(resources)
@@ -35,6 +35,9 @@ Puppet::Type.type(:dism).provide(:dism) do
   end
 
   def create
+require 'pry';binding.pry
+  test = command(:dism)
+puts "xxxxx #{test}"  
     cmd = [command(:dism), '/online', '/Enable-Feature']
     if resource[:all]
       cmd << '/All'
